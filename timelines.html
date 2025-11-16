@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Timeline — Ramesh Prakash Khade</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="timeline-data.js" defer></script>
+  <script src="scripts.js" defer></script>
+  
+  <meta name="author" content="Ramesh Prakash Khade">
+</head>
+<body>
+  <header class="site-header">
+  <a class="brand-title" href="index.html">Ramesh Khade</a>
+  <!-- Theme Toggle Button (ADD THIS BACK) -->
+  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light theme"></button>
+  <nav class="primary-nav">
+    <a href="index.html">About</a>
+    <a href="experience.html">Experiences</a>
+    <a href="projects.html">Projects</a>
+    <a href="skills.html">Skills</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="timelines.html">Timeline</a>
+    <a href="collaborations.html">Collaboration</a>
+  </nav>
+</header>
+
+
+  <main class="page">
+    <aside class="left-column">
+      <img class="avatar" src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png" alt="Ramesh Prakash Khade">
+      <h1 class="name">Timeline</h1>
+      <p class="muted">A chronological overview of my professional journey, education, and key milestones.</p>
+    </aside>
+
+    <section class="main-column">
+      <article class="panel">
+        <h2>Professional Journey</h2>
+        
+        <div class="timeline" id="timeline-container">
+          <!-- Timeline items will be rendered here by JavaScript -->
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <small>© Ramesh Prakash Khade</small>
+  </footer>
+
+  <script>
+    function initTimeline() {
+      const timelineContainer = document.getElementById('timeline-container');
+      
+      if (!window.timelineData) {
+        timelineContainer.innerHTML = '<p class="muted">Timeline data not available.</p>';
+        return;
+      }
+
+      timelineContainer.innerHTML = '';
+      
+      window.timelineData.forEach((item, index) => {
+        const timelineItem = document.createElement('div');
+        timelineItem.className = 'timeline-item fade-in';
+        timelineItem.style.animationDelay = (index * 0.1) + 's';
+        
+        timelineItem.innerHTML = `
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-year">${item.year}</div>
+            <h3 class="timeline-title">${item.title}</h3>
+            <p class="timeline-subtitle">${item.subtitle}</p>
+            <p class="timeline-description">${item.description}</p>
+            <span class="timeline-category">${item.category}</span>
+          </div>
+        `;
+        
+        timelineContainer.appendChild(timelineItem);
+      });
+
+      feather.replace();
+    }
+
+    document.addEventListener('DOMContentLoaded', initTimeline);
+  </script>
+
+</body>
+</html>
