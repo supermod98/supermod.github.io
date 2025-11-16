@@ -7,93 +7,40 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="/assets/css/civitas-theme.css" />
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
   <script src="projects-data.js" defer></script>
   <script src="scripts.js" defer></script>
-  <script>
-    function initProjectsPage() {
-      const projectsContainer = document.getElementById('projects-container');
-      const filterButtons = document.querySelectorAll('.filter-btn');
-      let currentFilter = 'all';
-
-      function renderProjects(filter = 'all') {
-        projectsContainer.innerHTML = '';
-        
-        let filteredProjects = window.projects;
-        
-        if (filter !== 'all') {
-          filteredProjects = window.projects.filter(p => p.theme === filter);
-        }
-
-        if (filteredProjects.length === 0) {
-          projectsContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--muted);">No projects found in this category.</p>';
-          return;
-        }
-
-        filteredProjects.forEach(project => {
-          const card = document.createElement('div');
-          card.className = 'project-card fade-in';
-          card.innerHTML = `
-            <div class="project-image">${project.title}</div>
-            <div class="project-content">
-              <span class="project-theme">${project.theme}</span>
-              <h3 class="project-title">${project.title}</h3>
-              <div class="project-duration">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                ${project.duration}
-              </div>
-              <p class="project-summary">${project.summary}</p>
-              <a href="project-detail.html?id=${project.id}" class="project-link">
-                View Details
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </a>
-            </div>
-          `;
-          projectsContainer.appendChild(card);
-        });
-
-        feather.replace();
-      }
-
-      filterButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          filterButtons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          currentFilter = btn.dataset.filter;
-          renderProjects(currentFilter);
-        });
-      });
-
-      renderProjects();
-    }
-
-    document.addEventListener('DOMContentLoaded', initProjectsPage);
-  </script>
-  
-  <meta name="author" content="Ramesh Khade">
+  <script src="/assets/js/civitas-theme.js" defer></script>
 </head>
 <body>
   <header class="site-header">
-  <a class="brand-title" href="index.html">Ramesh Khade</a>
-  <nav class="primary-nav">
-    <a href="index.html">About</a>
-    <a href="experience.html">Experiences</a>
-    <a href="projects.html">Projects</a>
-    <a href="skills.html">Skills</a>
-    <a href="portfolio.html">Portfolio</a>
-    <a href="timelines.html">Timeline</a>
-    <a href="collaborations.html">Collaboration</a>
-  </nav>
-</header>
+    <div class="header-inner site-container">
+      <a class="site-brand" href="index.html"><span class="logo">RK</span><span class="brand-text">Ramesh Khade</span></a>
+      <nav class="site-nav primary-nav" role="navigation" aria-label="Primary">
+        <a href="index.html">About</a>
+        <a href="experience.html">Experiences</a>
+        <a href="projects.html">Projects</a>
+        <a href="skills.html">Skills</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="timelines.html">Timeline</a>
+        <a href="collaborations.html">Collaboration</a>
+      </nav>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+      <button class="dark-toggle" data-dark-toggle aria-pressed="false" title="Toggle dark mode">Dark</button>
+      <div class="mobile-nav-panel" aria-hidden="true">
+        <a href="index.html">About</a>
+        <a href="experience.html">Experiences</a>
+        <a href="projects.html">Projects</a>
+        <a href="skills.html">Skills</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="timelines.html">Timeline</a>
+        <a href="collaborations.html">Collaboration</a>
+      </div>
+    </div>
+  </header>
 
-
-  <main class="page">
+  <main class="page site-container">
     <aside class="left-column">
       <img class="avatar" src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png" alt="Ramesh Khade">
       <h1 class="name">Projects</h1>
@@ -103,7 +50,7 @@
     <section class="main-column">
       <article class="panel">
         <h2>Project Portfolio</h2>
-        
+
         <div class="projects-container">
           <div class="filter-buttons">
             <button class="filter-btn active" data-filter="all">All Projects</button>
@@ -115,16 +62,61 @@
             <button class="filter-btn" data-filter="Project Coordination">Project Coordination</button>
           </div>
 
-          <div class="projects-grid" id="projects-container">
-            <!-- Projects will be rendered here by JavaScript -->
-          </div>
+          <div class="projects-grid" id="projects-container"></div>
         </div>
       </article>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <small>© Ramesh Khade</small>
-  </footer>
+  <footer class="site-footer"><small>© Ramesh Khade</small></footer>
+
+  <script>
+    (function initProjects() {
+      const projectsContainer = document.getElementById('projects-container');
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      let currentFilter = 'all';
+
+      function renderProjects(filter = 'all') {
+        projectsContainer.innerHTML = '';
+        let filtered = window.projects || [];
+        if (filter !== 'all') filtered = filtered.filter(p => p.theme === filter);
+        filtered.forEach(project => {
+          const card = document.createElement('div');
+          card.className = 'project-card fade-in';
+          card.setAttribute('data-project-id', project.id);
+
+          card.innerHTML = `
+            <div class="project-hero">
+              <img src="https://images.ctfassets.net/rz1oowkt5gyp/2xn1DqX37pQzUPjpxEi4Dh/2f0b0c4fdf04eb6043edd9bc4f393dfe/Hero_2x.png" alt="${project.title} image" loading="lazy">
+              <div class="hero-gradient"></div>
+              <div class="hero-title">${project.title}</div>
+            </div>
+            <div class="card-content">
+              <span class="project-theme">${project.theme}</span>
+              <div class="card-meta">${project.duration}</div>
+              <p class="card-summary">${project.summary}</p>
+              <a href="project-detail.html?id=${project.id}" class="project-link">View Details</a>
+            </div>
+          `;
+
+          projectsContainer.appendChild(card);
+        });
+      }
+
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentFilter = btn.dataset.filter;
+          renderProjects(currentFilter);
+          // re-run enhance to ensure hero images and overlays are correct
+          if(window.CivitasTheme && window.CivitasTheme.applyCards) window.CivitasTheme.applyCards();
+        });
+      });
+
+      renderProjects();
+      if(window.CivitasTheme && window.CivitasTheme.applyCards) window.CivitasTheme.applyCards();
+    })();
+  </script>
 </body>
 </html>
